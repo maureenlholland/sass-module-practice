@@ -1,0 +1,38 @@
+// @forward aggregates variables, mixins, and functions for use in another stylesheet
+@forward './includes/colors';
+@forward './includes/fonts';
+
+// note: if you want to apply forwarded members in the current stylesheet, you have to repeat with @use
+// @use makes variables, mixins, and functions available in the current stylesheet
+
+// also note! this does not mean the module is loaded again! 
+// from Sass docs: 
+// If you do write both a @forward and a @use for the same module in the same file, it’s always a good idea to write the @forward first. That way, if your users want to configure the forwarded module, that configuration will be applied to the @forward before your @use loads it without any configuration.
+
+// You will not be able to configure the module here, but stylesheets that @use this module will be able to set configuration
+// SassError: This module was already loaded, so it can't be configured using "with".
+//     ╷
+// 2   │   @forward './includes/colors';
+//     │   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ original load
+// ... │
+// 6   │ ┌ @use './includes/colors' with (
+// 7   │ │     $primary: black,
+// 8   │ │     $secondary: green,
+// 9   │ │ ); /* for simple pre-configured styles, you can set variables "with" your used stylesheet */
+//     │ └─^ new load
+// @use './includes/colors' with (
+//     $primary: black,
+//     $secondary: green,
+// );
+@use './includes/colors';
+@use './includes/fonts';
+
+h1 {
+    color: colors.$primary;
+    font-family: fonts.$heading;
+}
+
+p {
+    color: colors.$secondary;
+    font-family: fonts.$body;
+}

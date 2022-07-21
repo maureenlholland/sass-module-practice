@@ -1,0 +1,12 @@
+@import './includes/colors';
+@import './includes/fonts';
+
+h1 {
+    color: $primary;
+    font-family: $heading;
+}
+
+p {
+    color: $secondary;
+    font-family: $body;
+}

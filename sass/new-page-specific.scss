@@ -1,0 +1,21 @@
+// Only use one base stylesheet at a time
+
+// @use "old-base";
+// @use "new-base";
+
+// Used with "nb" namespace
+// Only configurable for variables that have been marked with defaults
+// SassError: This variable was not declared with !default in the @used module.
+@use "new-base" as nb with (
+    // $primary: pink, /* not a configurable variable, uncomment to see error  */
+    $secondary: green,
+);
+
+h1 {
+    // SassError: Undefined variable.
+    // color: $secondary;
+    // needs namespacing according to used stylesheet name or alias.
+    // color: old-base.$secondary;
+    // color: new-base.$secondary;
+    background-color: nb.$secondary;
+}
