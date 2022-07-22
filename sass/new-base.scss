@@ -1,6 +1,13 @@
 // @forward aggregates variables, mixins, and functions for use in another stylesheet
-@forward './includes/colors';
-@forward './includes/fonts';
+// SassError: Two forwarded modules both define a variable named $brand-theme.
+//   ╷
+// 2 │ @forward './includes/colors';
+//   │ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ original @forward
+// 3 │ @forward './includes/fonts';
+//   │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^ new @forward
+// @forward './includes/colors'; /* uncomment to see variable conflict error */
+@forward 'includes/colors' hide $brand-theme; /* see https://sass-lang.com/documentation/at-rules/forward#controlling-visibility */
+@forward 'includes/fonts';
 
 // note: if you want to apply forwarded members in the current stylesheet, you have to repeat with @use
 // @use makes variables, mixins, and functions available in the current stylesheet
@@ -24,11 +31,12 @@
 //     $primary: black,
 //     $secondary: green,
 // );
-@use './includes/colors';
-@use './includes/fonts';
+
+@use 'includes/colors';
+@use 'includes/fonts';
 
 h1 {
-    color: colors.$primary;
+    color: functions.get-theme($brand-theme: 'Brand A');
     font-family: fonts.$heading;
 }
 

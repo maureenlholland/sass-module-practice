@@ -5,10 +5,72 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sass Modules</title>
+    <style>
+        pre,
+        code {
+            background-color: whitesmoke;
+        }
+    </style>
 </head>
 <body>
     <h1>Testing</h1>
+    <h2>Old Sass</h2>
     <a href="/old-sass/index.html">Old Sass (@import)</a>
+    <h2>New Sass</h2>
     <a href="/new-sass/index.html">New Sass (@use, @forward)</a>
+    <h2>How to use</h2>
+    <p>This is a simple sandbox mostly used to trigger and fix Sass errors according to the new module system.</p>
+    <p>You can trigger 5 errors by following the Sass file comments in <code>new-base.scss</code>, <code>new-page-specific.scss</code>, and <code>includes/_functions.scss</code>:</p>
+    <ol>
+        <li>Undefined variable</li>
+        <li>This module was already loaded, so it can't be configured using "with"</li>
+        <li>Two forwarded modules both define a variable named $brand-theme</li>
+        <li>This variable was not declared with !default in the @used module</li>
+        <li>Module loop: this module is already being loaded</li>
+    </ol>
+    <h2>Mental shifts</h2>
+    <p>With <code>@import</code>, order mattered, but only to allow members defined in earlier stylesheets to be used in later stylesheets</p>
+    <pre>
+        <code>
+            // yet-another-stylesheet.scss is the current file loading the other stylesheets
+            
+            @import 'stylesheet'
+            @import 'another-stylesheet' // I can use members defined in 'stylesheet'
+            
+            // styles in current file can use members defined in stylesheet & another-stylesheet
+        </code>
+    </pre>
+    <p>With <code>@use</code>, scope matters in addition to order.</p>
+    <pre>
+        <code>
+            // yet-another-stylesheet.scss is the current file loading the other stylesheets
+
+            @use 'stylesheet'
+            @use 'another-stylesheet' // I can NOT use members defined in 'stylesheet'
+            
+            // styles in current file can use members defined in stylesheet & another-stylesheet
+        </code>
+    </pre>
+    <p>With <code>@forward</code>, we can aggregate styles to be used in a later stylesheet, but those styles are not available in the current stylesheet</p>
+    <pre>
+        <code>
+            // yet-another-stylesheet.scss is the current file loading the other stylesheets
+
+            @forward 'stylesheet'
+            @use 'another-stylesheet' // I STILL can NOT use members defined in 'stylesheet'
+            
+            // styles in current file can NOT use members defined in stylesheet because it is loaded with @forward
+            // styles in current file can use members defined in another-stylesheet because it is loaded with @use
+        </code>
+    </pre>
+    <pre>
+        <code>
+            // one-more-stylesheet.scss is the current file loading the other stylesheets
+
+            @use 'yet-another-stylesheet'
+            
+            // styles in current file can use members defined in stylesheet, another-stylesheet, and yet-another-stylesheet
+        </code>
+    </pre>
 </body>
 </html>

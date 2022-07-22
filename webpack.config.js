@@ -1,4 +1,5 @@
 const path = require('path');
+const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
@@ -10,7 +11,17 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].js',
       },
-      plugins: [new MiniCssExtractPlugin()],
+    plugins: [
+        new MiniCssExtractPlugin(),
+        new BrowserSyncPlugin({
+            // browse to http://localhost:3000/ during development,
+            // ./public directory is being served
+            host: 'localhost',
+            port: 3000,
+            server: { baseDir: ['.'] },
+            files: ["**/*.html", "sass/**/*.scss"]
+          })
+    ],
     module: {
         rules: [
             {

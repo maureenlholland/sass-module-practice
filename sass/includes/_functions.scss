@@ -1,0 +1,30 @@
+// new-page-specific.scss has loaded new-base
+// but functions wants to use a member from new-base and instead of loading that module specifically, tries to load all of new-base as well
+// SassError: Module loop: this module is already being loaded.
+//   ┌──> sass/includes/_functions.scss
+// 1 │   @use "../new-base";
+//   │   ^^^^^^^^^^^^^^^^^^ new load
+//   ╵
+//   ┌──> sass/new-page-specific.scss
+// 2 │ ┌ @use "new-base" as nb with (
+// 3 │ │     // Only configurable for variables that have been marked with defaults
+// 4 │ │     // SassError: This variable was not declared with !default in the @used module.
+// 5 │ │     // $primary: pink, /* not a configurable variable, uncomment to see error  */
+// 6 │ │     $secondary: green,
+// 7 │ │ );
+//   │ └─^ original load
+//   ╵
+//   sass/includes/_functions.scss 1:1  @use
+//   sass/new-base.scss 36:1            @use
+//   sass/new-page-specific.scss 2:1    root stylesheet
+// @use "../new-base" as *;
+
+@use "colors" as *; // to see Module Loop error, comment this out and uncomment the "../new-base" load
+
+@function get-theme($brand-theme) {
+  @if $brand-theme == 'Brand A' {
+    @return $primary;
+  } @else {
+    @return $secondary;
+  }
+}

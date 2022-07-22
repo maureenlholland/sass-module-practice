@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --mode development",
-    "start": "node index.js"
+    "build": "webpack --watch --mode development",
+    "start": "npm run build && node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "browser-sync-webpack-plugin": "^2.3.0",
     "css-loader": "^6.7.1",
     "mini-css-extract-plugin": "^2.6.1",
     "sass": "^1.53.0",

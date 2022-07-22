@@ -1,5 +1,6 @@
 @import "old-base";
 
 h1 {
+    // access to all variables, mixins, functions imported in "old-base", no need for namespace
     background-color: $secondary;
 }
